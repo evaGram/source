@@ -25,7 +25,6 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -55,17 +54,16 @@ import org.thunderdog.challegram.navigation.ViewController;
 import org.thunderdog.challegram.support.ViewTranslator;
 import org.thunderdog.challegram.theme.Theme;
 import org.thunderdog.challegram.theme.ThemeColorId;
+import org.thunderdog.challegram.util.TextSelection;
 import org.thunderdog.challegram.util.WebViewHolder;
 import org.thunderdog.challegram.util.text.Text;
 import org.thunderdog.challegram.widget.AttachDelegate;
-import org.thunderdog.challegram.widget.EditText;
 import org.thunderdog.challegram.widget.NoScrollTextView;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 
 import me.vkryl.android.AnimatorUtils;
-import me.vkryl.android.text.CodePointCountFilter;
 import me.vkryl.android.widget.FrameLayoutFix;
 import me.vkryl.core.BitwiseUtils;
 import me.vkryl.core.lambda.Destroyable;
@@ -86,22 +84,6 @@ public class Views {
   public static void setScrollBarPosition (View view) {
     if (view != null) {
       view.setVerticalScrollbarPosition(Lang.rtl() ? View.SCROLLBAR_POSITION_LEFT : View.SCROLLBAR_POSITION_RIGHT);
-    }
-  }
-
-  public static void setSelection (android.widget.EditText editText, int selection) {
-    if (editText != null) {
-      try {
-        editText.setSelection(selection);
-      } catch (Throwable ignored) { }
-    }
-  }
-
-  public static void setSelection (android.widget.EditText editText, int selectionStart, int selectionEnd) {
-    if (editText != null) {
-      try {
-        editText.setSelection(selectionStart, selectionEnd);
-      } catch (Throwable ignored) { }
     }
   }
 
@@ -184,16 +166,42 @@ public class Views {
     }
   }
 
+  @Nullable
+  public static TextSelection getSelection (android.widget.TextView editText) {
+    TextSelection selection = new TextSelection();
+    if (getSelection(editText, selection)) {
+      return selection;
+    }
+    return null;
+  }
+
+  public static boolean getSelection (android.widget.TextView editText, TextSelection selection) {
+    int start = editText.getSelectionStart();
+    int end = editText.getSelectionEnd();
+    if (end < 0) {
+      end = start;
+    }
+    if (start < 0) {
+      return false;
+    }
+    if (start <= end) {
+      selection.set(start, end);
+    } else {
+      // some IMEs may incorrectly set Selection.END before Selection.START
+      selection.set(end, start);
+    }
+    return true;
+  }
+
   public static void setSingleLine (android.widget.EditText editText, boolean singleLine) {
-    int savedCursorStart = editText.getSelectionStart();
-    int savedCursorEnd = editText.getSelectionEnd();
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      if (editText.isSingleLine() == singleLine)
+        return;
+    }
+    TextSelection selection = getSelection(editText);
     editText.setSingleLine(singleLine);
-    if (savedCursorEnd != 0 || savedCursorStart != 0) {
-      try {
-        editText.setSelection(savedCursorStart, savedCursorEnd);
-      } catch (Throwable t) {
-        Log.w("Cannot move cursor", t);
-      }
+    if (selection != null) {
+      selection.apply(editText);
     }
   }
 
@@ -221,14 +229,6 @@ public class Views {
       i++;
     }
     return top;
-  }
-
-  public static void setLengthLimit (EditText editText, final int maxLength, boolean calculateByCodePoints) {
-    if (editText != null) {
-      editText.setFilters(new InputFilter[] {
-         calculateByCodePoints ? new CodePointCountFilter(maxLength) : new InputFilter.LengthFilter(maxLength)
-      });
-    }
   }
 
   public static final int TEXT_FLAG_BOLD = 0x01;

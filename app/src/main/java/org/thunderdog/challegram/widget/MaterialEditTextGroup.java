@@ -145,8 +145,8 @@ public class MaterialEditTextGroup extends FrameLayoutFix implements View.OnFocu
 
     editText = new MaterialEditText(context) {
       @Override
-      public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-        InputConnection conn = super.onCreateInputConnection(outAttrs);
+      public InputConnection createInputConnection (EditorInfo outAttrs) {
+        InputConnection conn = super.createInputConnection(outAttrs);
         if (nextCallback != null && nextCallback.needNextButton(MaterialEditTextGroup.this)) {
           outAttrs.imeOptions &= ~EditorInfo.IME_FLAG_NO_ENTER_ACTION;
         }
@@ -493,7 +493,7 @@ public class MaterialEditTextGroup extends FrameLayoutFix implements View.OnFocu
 
   private void setTextImpl (CharSequence text) {
     editText.setText(text);
-    Views.setSelection(editText, text != null ? text.length() : 0);
+    editText.setSelection(text != null ? text.length() : 0);
   }
 
   public void setText (CharSequence text, boolean animated) {
@@ -747,7 +747,7 @@ public class MaterialEditTextGroup extends FrameLayoutFix implements View.OnFocu
       editText.setIsPassword(pendingTextIsPassword);
       if (!StringUtils.isEmpty(pendingText)) {
         editText.setText(pendingText);
-        Views.setSelection(editText, pendingText.length());
+        editText.setSelection(pendingText.length());
       } else {
         editText.setText("");
       }

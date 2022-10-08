@@ -111,7 +111,7 @@ public class DrawerHeaderView extends View implements Destroyable, GlobalAccount
   }
 
   @Override
-  public void onEmojiPartLoaded () {
+  public void onEmojiUpdated (boolean isPackSwitch) {
     invalidate();
   }
 

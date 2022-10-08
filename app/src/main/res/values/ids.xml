@@ -359,6 +359,7 @@
   <item type="id" name="btn_addContact" />
   <item type="id" name="btn_inviteLink" />
   <item type="id" name="btn_toggleSignatures" />
+  <item type="id" name="btn_toggleJoinByRequest" />
   <item type="id" name="btn_toggleProtection" />
   <item type="id" name="btn_allMembers" />
   <item type="id" name="btn_onlyAdmins" />
@@ -694,6 +695,7 @@
   <item type="id" name="btn_removeChatFromListOrClearHistory" />
   <item type="id" name="btn_destroyChat" />
 
+  <item type="id" name="btn_plain" />
   <item type="id" name="btn_bold" />
   <item type="id" name="btn_italic" />
   <item type="id" name="btn_spoiler" />
@@ -1170,6 +1172,7 @@
   <item type="id" name="right_readMessages" />
   <item type="id" name="right_sendMessages" />
   <item type="id" name="right_sendMedia" />
+  <item type="id" name="right_sendVoiceVideo" />
   <item type="id" name="right_sendStickersAndGifs" />
   <item type="id" name="right_sendPolls" />
   <item type="id" name="right_embedLinks" />

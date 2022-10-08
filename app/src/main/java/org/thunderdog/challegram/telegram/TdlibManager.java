@@ -354,9 +354,16 @@ public class TdlibManager implements Iterable<TdlibAccount>, UI.StateListener {
 
   public String tdlibCommitHash () {
     if (!StringUtils.isEmpty(tdlibCommitHash)) {
-      return this.tdlibCommitHash;
+      return StringUtils.limit(this.tdlibCommitHash, 7);
     }
     return Td.tdlibCommitHash();
+  }
+
+  public String tdlibCommitHashFull () {
+    if (!StringUtils.isEmpty(tdlibCommitHash)) {
+      return this.tdlibCommitHash;
+    }
+    return Td.tdlibCommitHashFull();
   }
 
   public String tdlibVersion () {
@@ -618,7 +625,6 @@ public class TdlibManager implements Iterable<TdlibAccount>, UI.StateListener {
   private static final int ACTION_DISPATCH_NETWORK_STATE = 0;
   private static final int ACTION_DISPATCH_NETWORK_TYPE = 1;
   private static final int ACTION_DISPATCH_NETWORK_DATA_SAVER = 2;
-  // private static final int ACTION_DISPATCH_KNOWN_USER_ID = 3;
   private static final int ACTION_DISPATCH_ACCOUNT_PROFILE = 4;
   private static final int ACTION_DISPATCH_ACCOUNT_PROFILE_PHOTO = 5;
   private static final int ACTION_DISPATCH_TOTAL_UNREAD_COUNT = 6;
@@ -635,18 +641,6 @@ public class TdlibManager implements Iterable<TdlibAccount>, UI.StateListener {
       case ACTION_DISPATCH_NETWORK_DATA_SAVER:
         global().notifySystemDataSaverStateChanged(msg.arg1 == 1);
         break;
-      /*case ACTION_DISPATCH_KNOWN_USER_ID: {
-        int accountId = msg.arg1;
-        int userId = msg.arg2;
-        TdlibAccount account = accounts.get(accountId);
-        if (!account.isUnauthorized() && account.setKnownUserId(userId)) {
-          saveAccount(account, ACCOUNT_USER_CHANGED);
-          if (userId != 0) {
-            account.tdlib().checkDeviceToken();
-          }
-        }
-        break;
-      }*/
       case ACTION_DISPATCH_ACCOUNT_PROFILE: {
         onAccountProfileChanged(account(msg.arg1), (TdApi.User) msg.obj, msg.arg1 == currentAccount.id, msg.arg2 == 1);
         break;
@@ -1613,23 +1607,46 @@ public class TdlibManager implements Iterable<TdlibAccount>, UI.StateListener {
 
   private static final String EXPERIMENTAL_BUILD_ERROR = "EXPERIMENTAL_BUILD_DETECTED";
 
-  public synchronized void checkDeviceToken () {
+  public void checkDeviceToken () {
+    checkDeviceToken(null);
+  }
+
+  public void checkDeviceToken (@Nullable RunnableBool after) {
+    checkDeviceToken(3, after);
+  }
+
+  public synchronized void checkDeviceToken (int retryCount, @Nullable RunnableBool after) {
+    if (this.tokenState == TokenState.OK) {
+      if (after != null) {
+        after.runWithBool(true);
+      }
+      return;
+    }
     if (BuildConfig.EXPERIMENTAL) {
       setTokenState(TokenState.ERROR, EXPERIMENTAL_BUILD_ERROR, null);
+      if (after != null) {
+        after.runWithBool(false);
+      }
       return;
     }
     setTokenState(TokenState.INITIALIZING);
-    TdlibNotificationUtils.getDeviceToken(new TdlibNotificationUtils.RegisterCallback() {
+    TdlibNotificationUtils.getDeviceToken(retryCount, new TdlibNotificationUtils.RegisterCallback() {
       @Override
       public void onSuccess (@NonNull TdApi.DeviceTokenFirebaseCloudMessaging token) {
         // TODO: use TdApi.DeviceToken instead of taking token's String value directly
         setDeviceToken(token.token);
+        if (after != null) {
+          after.runWithBool(true);
+        }
       }
 
       @Override
       public void onError (@NonNull String errorKey, @Nullable Throwable e) {
         Log.e(Log.TAG_FCM, "Failed to retrieve push token", e);
         setTokenState(TokenState.ERROR, errorKey, e);
+        if (after != null) {
+          after.runWithBool(false);
+        }
       }
     });
   }
@@ -2005,21 +2022,19 @@ public class TdlibManager implements Iterable<TdlibAccount>, UI.StateListener {
     if (account.setUnauthorized(isUnauthorized, userId)) {
       saveAccount(account, ACCOUNT_AUTHORIZATION_CHANGED);
     }
-    if (changed) {
-      if (checkAliveAccount(account)) {
-        checkPauseTimeouts(null);
-      }
-      if (isUnauthorized && accountId == preferredAccountId) {
-        runOnUiThread(() -> {
+    runOnUiThread(() -> {
+      if (changed) {
+        if (checkAliveAccount(account)) {
+          checkPauseTimeouts(null);
+        }
+        if (isUnauthorized && accountId == preferredAccountId) {
           int newAccountId = findNextAccountId(accountId);
           if (newAccountId != TdlibAccount.NO_ID) {
             changePreferredAccountId(newAccountId, SWITCH_REASON_UNAUTHORIZED);
           }
-        });
+        }
       }
-    }
-    runOnUiThread(() -> {
-      global().notifyAuthorizationStateChanged(accounts.get(accountId), authState, status);
+      global().notifyAuthorizationStateChanged(account, authState, status);
     });
   }
 

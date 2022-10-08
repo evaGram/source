@@ -40,6 +40,7 @@ import org.thunderdog.challegram.R;
 import org.thunderdog.challegram.U;
 import org.thunderdog.challegram.component.attach.MediaLayout;
 import org.thunderdog.challegram.component.base.SettingView;
+import org.thunderdog.challegram.config.Config;
 import org.thunderdog.challegram.core.Lang;
 import org.thunderdog.challegram.data.TD;
 import org.thunderdog.challegram.data.TGMessage;
@@ -782,7 +783,8 @@ public class SettingsController extends ViewController<Void> implements
     TextWrapper textWrapper = textWrappers.get(id);
     if (textWrapper == null || !Td.equalsTo(currentTexts.get(id), text)) {
       currentTexts.put(id, text);
-      textWrapper = new TextWrapper(tdlib, text, TGMessage.simpleTextStyleProvider(), TextColorSets.Regular.NORMAL, null);
+      // TODO: custom emoji support
+      textWrapper = new TextWrapper(tdlib, text, TGMessage.simpleTextStyleProvider(), TextColorSets.Regular.NORMAL, null, null);
       textWrapper.addTextFlags(Text.FLAG_CUSTOM_LONG_PRESS | (Lang.rtl() ? Text.FLAG_ALIGN_RIGHT : 0));
       textWrappers.put(id, textWrapper);
     }
@@ -1209,33 +1211,52 @@ public class SettingsController extends ViewController<Void> implements
     final int size = allowDebug ? 3 : 2;
     IntList ids = new IntList(size);
     IntList icons = new IntList(size);
+    IntList colors = new IntList(size);
     StringList strings = new StringList(size);
 
     ids.append(R.id.btn_copyText);
     strings.append(R.string.CopyVersion);
     icons.append(R.drawable.baseline_content_copy_24);
+    colors.append(OPTION_COLOR_NORMAL);
+
+    if (!Config.SHOW_COPY_REPORT_DETAILS_IN_SETTINGS) {
+      ids.append(R.id.btn_copyDebug);
+      strings.append(R.string.CopyReportData);
+      icons.append(R.drawable.baseline_bug_report_24);
+      colors.append(OPTION_COLOR_NORMAL);
+    }
+
+    boolean notificationError = tdlib.context().getTokenState() == TdlibManager.TokenState.ERROR;
+    if (allowDebug || notificationError) {
+      ids.append(R.id.btn_pushService);
+      strings.append(R.string.PushServices);
+      icons.append(notificationError ? R.drawable.baseline_sync_problem_24 : R.drawable.baseline_sync_24);
+      colors.append(notificationError ? OPTION_COLOR_RED : OPTION_COLOR_NORMAL);
+    }
 
     if (allowDebug) {
       ids.append(R.id.btn_tdlib);
       strings.append(R.string.TdlibLogs);
       icons.append(R.drawable.baseline_build_24);
-
-      ids.append(R.id.btn_pushService);
-      strings.append(R.string.PushServices);
-      icons.append(R.drawable.baseline_build_24);
+      colors.append(OPTION_COLOR_NORMAL);
 
       ids.append(R.id.btn_build);
       strings.append(R.string.AppLogs);
       icons.append(R.drawable.baseline_build_24);
+      colors.append(OPTION_COLOR_NORMAL);
     }
 
     SpannableStringBuilder b = new SpannableStringBuilder();
     b.append(Lang.getMarkdownStringSecure(this, R.string.AppSignature, BuildConfig.VERSION_NAME));
 
-    showOptions(b, ids.get(), strings.get(), null, icons.get(), (itemView, id) -> {
+    showOptions(b, ids.get(), strings.get(), colors.get(), icons.get(), (itemView, id) -> {
       switch (id) {
         case R.id.btn_copyText: {
           UI.copyText(Lang.getAppBuildAndVersion(tdlib), R.string.CopiedText);
+          break;
+        }
+        case R.id.btn_copyDebug: {
+          UI.copyText(U.getUsefulMetadata(tdlib), R.string.CopiedText);
           break;
         }
         case R.id.btn_pushService: {
@@ -1260,8 +1281,8 @@ public class SettingsController extends ViewController<Void> implements
   }
 
   @Override
-  public void onInstalledStickerSetsUpdated (long[] stickerSetIds, boolean isMasks) {
-    if (!isMasks) {
+  public void onInstalledStickerSetsUpdated (long[] stickerSetIds, TdApi.StickerType stickerType) {
+    if (stickerType.getConstructor() == TdApi.StickerTypeRegular.CONSTRUCTOR) {
       runOnUiThreadOptional(() -> {
         allStickerSets = null;
         hasPreloadedStickers = false;
@@ -1302,7 +1323,7 @@ public class SettingsController extends ViewController<Void> implements
       return;
     }
     hasPreloadedStickers = true;
-    tdlib.client().send(new TdApi.GetInstalledStickerSets(false), object -> {
+    tdlib.client().send(new TdApi.GetInstalledStickerSets(new TdApi.StickerTypeRegular()), object -> {
       if (!isDestroyed()) {
         switch (object.getConstructor()) {
           case TdApi.StickerSets.CONSTRUCTOR: {
