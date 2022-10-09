@@ -1258,13 +1258,4 @@
   <item type="id" name="btn_rememberSendOptions" />
   <item type="id" name="btn_disableReactions" />
   <item type="id" name="btn_msgMenuSettings" />
-
-  <!-- Drawer settings buttons -->
-  <item type="id" name="btn_drawerSettings" />
-  <item type="id" name="btn_drawerContacts" />
-  <item type="id" name="btn_drawerCalls" />
-  <item type="id" name="btn_drawerFavourite" />
-  <item type="id" name="btn_drawerInviteFriends" />
-  <item type="id" name="btn_drawerHelp" />
-  <item type="id" name="btn_drawerNightMode" />
 </resources>

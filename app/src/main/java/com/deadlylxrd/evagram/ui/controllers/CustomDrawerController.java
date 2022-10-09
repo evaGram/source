@@ -1,4 +1,4 @@
-package com.deadlylxrd.evagram.ui;
+package com.deadlylxrd.evagram.ui.controllers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -32,34 +32,35 @@ public class CustomDrawerController extends RecyclerViewController<Void> impleme
     return Lang.getString(R.string.DrawerSettings);
   }
 
-  @Override public void onBackPressed() {
-    LifecycleUtils.restartApp();
+  // Implementation
+  public void onBackPressed () {
+    LifecycleUtils.restartAppWithTimer();
   }
 
   @Override public void onClick (View v) {
     int id = v.getId();
     switch (id) {
-      case R.id.btn_drawerContacts:
+      case R.id.btn_contacts:
         EvaSettings.instance().toggleDrawerContacts();
         adapter.updateValuedSettingById(R.id.btn_drawerContacts);
         break;
-      case R.id.btn_drawerCalls:
+      case R.id.btn_calls:
         EvaSettings.instance().toggleDrawerCalls();
         adapter.updateValuedSettingById(R.id.btn_drawerCalls);
         break;
-      case R.id.btn_drawerFavourite:
+      case R.id.btn_savedMessages:
         EvaSettings.instance().toggleDrawerFavourite();
         adapter.updateValuedSettingById(R.id.btn_drawerFavourite);
         break;
-      case R.id.btn_drawerInviteFriends:
+      case R.id.btn_invite:
         EvaSettings.instance().toggleDrawerInviteFriends();
         adapter.updateValuedSettingById(R.id.btn_drawerInviteFriends);
         break;
-      case R.id.btn_drawerHelp:
+      case R.id.btn_help:
         EvaSettings.instance().toggleDrawerHelp();
         adapter.updateValuedSettingById(R.id.btn_drawerHelp);
         break;
-      case R.id.btn_drawerNightMode:
+      case R.id.btn_night:
         EvaSettings.instance().toggleDrawerNightMode();
         adapter.updateValuedSettingById(R.id.btn_drawerNightMode);
         break;
@@ -67,7 +68,7 @@ public class CustomDrawerController extends RecyclerViewController<Void> impleme
   }
 
   @Override public void onApplySettings (int id, SparseIntArray result) {
-
+    // Do nothing.
   }
 
   @Override public int getId () {
@@ -80,22 +81,22 @@ public class CustomDrawerController extends RecyclerViewController<Void> impleme
         view.setDrawModifier(item.getDrawModifier());
         switch (item.getId()) {
           case R.id.btn_drawerContacts:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isDrawerContactsShow(), isUpdate);
+            view.setChecked(EvaSettings.instance().isDrawerContactsShow(), isUpdate);
             break;
           case R.id.btn_drawerCalls:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isDrawerCallsShow(), isUpdate);
+            view.setChecked(EvaSettings.instance().isDrawerCallsShow(), isUpdate);
             break;
           case R.id.btn_drawerFavourite:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isDrawerFavouriteShow(), isUpdate);
+            view.setChecked(EvaSettings.instance().isDrawerFavouriteShow(), isUpdate);
             break;
           case R.id.btn_drawerInviteFriends:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isDrawerFriendsShow(), isUpdate);
+            view.setChecked(EvaSettings.instance().isDrawerFriendsShow(), isUpdate);
             break;
           case R.id.btn_drawerHelp:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isDrawerHelpShow(), isUpdate);
+            view.setChecked(EvaSettings.instance().isDrawerHelpShow(), isUpdate);
             break;
           case R.id.btn_drawerNightMode:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isDrawerNightmodeShow(), isUpdate);
+            view.setChecked(EvaSettings.instance().isDrawerNightmodeShow(), isUpdate);
             break;
         }
       }
@@ -103,17 +104,16 @@ public class CustomDrawerController extends RecyclerViewController<Void> impleme
 
     ArrayList<ListItem> items = new ArrayList<>();
 
-    // Custom drawer sections
     items.add(new ListItem(ListItem.TYPE_EMPTY_OFFSET_SMALL));
-    items.add(new ListItem(ListItem.TYPE_DESCRIPTION, 0, 0, R.string.DrawerSettingsDesc));
+    items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.DrawerSettingsDesc));
 
     items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_drawerContacts, 0, R.string.Contacts));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_drawerCalls, 0, R.string.Calls));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_drawerFavourite, 0, R.string.SavedMessages));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_drawerInviteFriends, 0, R.string.InviteFriends));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_drawerHelp, 0, R.string.Help));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_drawerNightMode, 0, R.string.NightMode));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_contacts, 0, R.string.Contacts));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_calls, 0, R.string.Calls));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_savedMessages, 0, R.string.SavedMessages));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_invite, 0, R.string.InviteFriends));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_help, 0, R.string.Help));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_night, 0, R.string.NightMode));
     items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
 
     adapter.setItems(items, true);

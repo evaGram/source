@@ -27,7 +27,7 @@
     <string name="EnableComments">Включить комментарии</string>
     <string name="EnableCommentsDesc">Работает только если включены сообщения-блоки в каналах</string>
     <string name="DrawerSettings">Настройки бокового меню</string>
-    <string name="DrawerSettingsDesc">В этом разделе Вы можете выбрать, какие пункты будут отображаться в боковом меню. Требуется перезапуск приложения</string>
+    <string name="DrawerSettingsDesc">Пункты в боковом меню</string>
 
     <!-- General settings -->
     <string name="ShowChatId">Показывать ID в профиле</string>
@@ -39,5 +39,5 @@
     <string name="RememberSendOptionsDesc">Сохраняет состояние опций отравки, таких как отправка без звука, отправка без автора, отправка без подписи</string>
     <string name="DisableReactions">Отключить реакции</string>
     <string name="MsgMenuSettings">Меню сообщений</string>
-    <string name="MsgMenuSettingsDesc">В этом разделе Вы можете выбрать, какие пункты будут отображаться в меню сообщений</string>
+    <string name="MsgMenuSettingsDesc">Пункты в меню сообщений</string>
 </resources>

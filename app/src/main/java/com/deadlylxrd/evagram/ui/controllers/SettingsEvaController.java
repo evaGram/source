@@ -1,4 +1,4 @@
-package com.deadlylxrd.evagram.ui;
+package com.deadlylxrd.evagram.ui.controllers;
 
 import android.content.Context;
 import android.util.SparseIntArray;
@@ -6,10 +6,10 @@ import android.view.View;
 
 import com.deadlylxrd.evagram.EvaConfig;
 import com.deadlylxrd.evagram.EvaSettings;
-import com.deadlylxrd.evagram.ui.SettingsGeneralController;
-import com.deadlylxrd.evagram.ui.SettingsAppearanceController;
-import com.deadlylxrd.evagram.ui.SettingsChatsController;
-import com.deadlylxrd.evagram.ui.SettingsExperimentalController;
+import com.deadlylxrd.evagram.ui.controllers.SettingsGeneralController;
+import com.deadlylxrd.evagram.ui.controllers.SettingsAppearanceController;
+import com.deadlylxrd.evagram.ui.controllers.SettingsChatsController;
+import com.deadlylxrd.evagram.ui.controllers.SettingsExperimentalController;
 
 import org.thunderdog.challegram.R;
 import org.thunderdog.challegram.component.base.SettingView;
@@ -90,15 +90,6 @@ public class SettingsEvaController extends RecyclerViewController<Void> implemen
       }
       Settings.instance().setAutoUpdateMode(autoUpdateMode1);
       adapter.updateValuedSettingById(R.id.btn_checkUpdates);
-
-      /* int index = adapter.indexOfViewById(R.id.btn_updateAutomatically);
-      if (shouldChangeUi && index != -1) {
-        if (autoUpdateMode1 == Settings.AUTO_UPDATE_MODE_NEVER) {
-          adapter.removeRange(index);
-        } else {
-          adapter.addItems(index);
-        }
-      } */
     }));
   }
 
@@ -118,19 +109,19 @@ public class SettingsEvaController extends RecyclerViewController<Void> implemen
         navigateTo(new SettingsExperimentalController(context, tdlib));
         break;
       case R.id.btn_tgChannel: {
-        tdlib.ui().openUrl(this, "https://t.me/evaGramOfficial", new TdlibUi.UrlOpenParameters().forceInstantView());
+        tdlib.ui().openUrl(this, EvaConfig.CHANNEL_LINK, new TdlibUi.UrlOpenParameters().forceInstantView());
         break;
       }
       case R.id.btn_sourceCode: {
-        tdlib.ui().openUrl(this, "https://github.com/evaGram/evaGram", new TdlibUi.UrlOpenParameters().forceInstantView());
+        tdlib.ui().openUrl(this, EvaConfig.SOURCE_CODE_LINK, new TdlibUi.UrlOpenParameters().forceInstantView());
         break;
       }
       case R.id.btn_evaDev: {
-        tdlib.ui().openUrl(this, "https://t.me/deadlylxrd", new TdlibUi.UrlOpenParameters().forceInstantView());
+        tdlib.ui().openUrl(this, EvaConfig.DEV_LINK, new TdlibUi.UrlOpenParameters().forceInstantView());
         break;
       }
       case R.id.btn_supportProject: {
-        tdlib.ui().openUrl(this, "https://deadlylxrd.me/donate", new TdlibUi.UrlOpenParameters().forceInstantView());
+        tdlib.ui().openUrl(this, EvaConfig.DONATE_LINK, new TdlibUi.UrlOpenParameters().forceInstantView());
         break;
       }
       case R.id.btn_checkUpdates: {

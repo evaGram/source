@@ -1,4 +1,4 @@
-package com.deadlylxrd.evagram.ui;
+package com.deadlylxrd.evagram.ui.controllers;
 
 import android.content.Context;
 import android.util.SparseIntArray;
@@ -80,7 +80,7 @@ public class MsgMenuController extends RecyclerViewController<Void> implements V
   }
 
   @Override public void onApplySettings (int id, SparseIntArray result) {
-
+    // Do nothing.
   }
 
   @Override public int getId () {
@@ -93,37 +93,37 @@ public class MsgMenuController extends RecyclerViewController<Void> implements V
         view.setDrawModifier(item.getDrawModifier());
         switch (item.getId()) {
           case R.id.btn_messageReply:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isMsgReply(), isUpdate);
+            view.setChecked(EvaSettings.instance().isMsgReply(), isUpdate);
             break;
           case R.id.btn_messageShare:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isMsgRepost(), isUpdate);
+            view.setChecked(EvaSettings.instance().isMsgRepost(), isUpdate);
             break;
           case R.id.btn_messageRepeat:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isMsgRepeat(), isUpdate);
+            view.setChecked(EvaSettings.instance().isMsgRepeat(), isUpdate);
             break;
           case R.id.btn_messagePin:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isMsgPin(), isUpdate);
+            view.setChecked(EvaSettings.instance().isMsgPin(), isUpdate);
             break;
           case R.id.btn_messageEdit:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isMsgEdit(), isUpdate);
+            view.setChecked(EvaSettings.instance().isMsgEdit(), isUpdate);
             break;
           case R.id.btn_messageCopyLink:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isMsgLink(), isUpdate);
+            view.setChecked(EvaSettings.instance().isMsgLink(), isUpdate);
             break;
           case R.id.btn_messageCopy:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isMsgCopy(), isUpdate);
+            view.setChecked(EvaSettings.instance().isMsgCopy(), isUpdate);
             break;
           case R.id.btn_messageDelete:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isMsgDel(), isUpdate);
+            view.setChecked(EvaSettings.instance().isMsgDel(), isUpdate);
             break;
           case R.id.btn_saveFile:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isMsgSave(), isUpdate);
+            view.setChecked(EvaSettings.instance().isMsgSave(), isUpdate);
             break;
           case R.id.btn_viewStatistics:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isMsgStats(), isUpdate);
+            view.setChecked(EvaSettings.instance().isMsgStats(), isUpdate);
             break;
           case R.id.btn_messageMore:
-            view.getToggler().setRadioEnabled(EvaSettings.instance().isMsgOther(), isUpdate);
+            view.setChecked(EvaSettings.instance().isMsgOther(), isUpdate);
             break;
         }
       }
@@ -132,20 +132,20 @@ public class MsgMenuController extends RecyclerViewController<Void> implements V
     ArrayList<ListItem> items = new ArrayList<>();
 
     items.add(new ListItem(ListItem.TYPE_EMPTY_OFFSET_SMALL));
-    items.add(new ListItem(ListItem.TYPE_DESCRIPTION, 0, 0, R.string.MsgMenuSettingsDesc));
+    items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.MsgMenuSettingsDesc));
 
     items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_messageReply, 0, R.string.Reply));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_messageRepeat, 0, R.string.MessageRepeat));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_messageShare, 0, R.string.Share));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_messagePin, 0, R.string.MessagePin));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_messageEdit, 0, R.string.edit));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_messageCopyLink, 0, R.string.CopyLink));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_messageCopy, 0, R.string.Copy));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_messageDelete, 0, R.string.Delete));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_saveFile, 0, R.string.Save));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_viewStatistics, 0, R.string.ViewStats));
-    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_messageMore, 0, R.string.MoreMessageOptions));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_messageReply, 0, R.string.Reply));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_messageRepeat, 0, R.string.MessageRepeat));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_messageShare, 0, R.string.Share));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_messagePin, 0, R.string.MessagePin));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_messageEdit, 0, R.string.edit));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_messageCopyLink, 0, R.string.CopyLink));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_messageCopy, 0, R.string.Copy));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_messageDelete, 0, R.string.Delete));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_saveFile, 0, R.string.Save));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_viewStatistics, 0, R.string.ViewStats));
+    items.add(new ListItem(ListItem.TYPE_CHECKBOX_OPTION, R.id.btn_messageMore, 0, R.string.MoreMessageOptions));
     items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
 
     adapter.setItems(items, true);

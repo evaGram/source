@@ -1,4 +1,4 @@
-package com.deadlylxrd.evagram.ui;
+package com.deadlylxrd.evagram.ui.controllers;
 
 import android.content.Context;
 import android.util.SparseIntArray;
@@ -19,28 +19,33 @@ import org.thunderdog.challegram.v.CustomRecyclerView;
 
 import java.util.ArrayList;
 
-public class SettingsExperimentalController extends RecyclerViewController<Void> implements View.OnClickListener, ViewController.SettingsIntDelegate {
+public class SettingsGeneralController extends RecyclerViewController<Void> implements View.OnClickListener, ViewController.SettingsIntDelegate {
   private SettingsAdapter adapter;
 
-  public SettingsExperimentalController (Context context, Tdlib tdlib) {
+  public SettingsGeneralController (Context context, Tdlib tdlib) {
     super(context, tdlib);
   }
 
   @Override public CharSequence getName () {
-    return Lang.getString(R.string.ExperimentalSettings);
+    return Lang.getString(R.string.GeneralSettings);
   }
 
   @Override public void onClick (View v) {
     int id = v.getId();
     switch (id) {
+        case R.id.btn_showChatId:
+        EvaSettings.instance().toggleShowChatID();
+        adapter.updateValuedSettingById(R.id.btn_showChatId);
+        break;
     }
   }
 
   @Override public void onApplySettings (int id, SparseIntArray result) {
+    // Do nothing.
   }
 
   @Override public int getId () {
-    return R.id.controller_experimentalSettings;
+    return R.id.controller_generalSettings;
   }
 
   @Override protected void onCreateView (Context context, CustomRecyclerView recyclerView) {
@@ -48,10 +53,22 @@ public class SettingsExperimentalController extends RecyclerViewController<Void>
       @Override protected void setValuedSetting (ListItem item, SettingView view, boolean isUpdate) {
         view.setDrawModifier(item.getDrawModifier());
         switch (item.getId()) {
+            case R.id.btn_showChatId:
+            view.getToggler().setRadioEnabled(EvaSettings.instance().isChatIdShows(), isUpdate);
+            break;
         }
       }
     };
 
+    ArrayList<ListItem> items = new ArrayList<>();
+
+    items.add(new ListItem(ListItem.TYPE_EMPTY_OFFSET_SMALL));
+
+    items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
+    items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_showChatId, 0, R.string.ShowChatId));
+    items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
+
+    adapter.setItems(items, true);
     recyclerView.setAdapter(adapter);
   }
 }

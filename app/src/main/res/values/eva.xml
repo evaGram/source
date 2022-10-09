@@ -30,7 +30,7 @@
     <string name="EnableComments">Enable comments</string>
     <string name="EnableCommentsDesc">Works only when block-messages are enabled</string>
     <string name="DrawerSettings">Drawer manager</string>
-    <string name="DrawerSettingsDesc">In this section you can choose which items will be displayed in the drawer. Restart needed</string>
+    <string name="DrawerSettingsDesc">Manage drawer sections</string>
 
     <!-- General settings -->
     <string name="ShowChatId">Show chat ID</string>
@@ -42,5 +42,5 @@
     <string name="RememberSendOptionsDesc">Saves the state of the send options, such as send without sound, send without author, send without label</string>
     <string name="DisableReactions">Disable reactions</string>
     <string name="MsgMenuSettings">Message menu manager</string>
-    <string name="MsgMenuSettingsDesc">In this section you can choose which items will be displayed in the message menu</string>
+    <string name="MsgMenuSettingsDesc">Manage message menu sections</string>
 </resources>

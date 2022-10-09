@@ -1,4 +1,4 @@
-package com.deadlylxrd.evagram.ui;
+package com.deadlylxrd.evagram.ui.controllers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,7 +6,7 @@ import android.util.SparseIntArray;
 import android.view.View;
 
 import com.deadlylxrd.evagram.EvaSettings;
-import com.deadlylxrd.evagram.ui.CustomDrawerController;
+import com.deadlylxrd.evagram.ui.controllers.CustomDrawerController;
 import com.deadlylxrd.evagram.utils.LifecycleUtils;
 
 import org.thunderdog.challegram.R;
@@ -52,7 +52,7 @@ public class SettingsAppearanceController extends RecyclerViewController<Void> i
   }
 
   @Override public void onApplySettings (int id, SparseIntArray result) {
-
+    // Do nothing.
   }
 
   @Override public int getId () {

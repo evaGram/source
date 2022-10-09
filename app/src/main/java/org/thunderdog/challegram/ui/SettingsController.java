@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.deadlylxrd.evagram.EvaSettings;
-import com.deadlylxrd.evagram.ui.SettingsEvaController;
+import com.deadlylxrd.evagram.ui.controllers.SettingsEvaController;
 import com.deadlylxrd.evagram.utils.Utils;
 
 import org.drinkless.td.libcore.telegram.Client;

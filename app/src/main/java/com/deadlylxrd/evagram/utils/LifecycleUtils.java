@@ -56,8 +56,6 @@ public class LifecycleUtils {
   }
 
   public static void restartApp() {
-    AndroidUtils.sendToast(R.string.AppRestarted);
-
     Context ctx = AndroidUtils.getGlobalContext();
     PackageManager pm = ctx.getPackageManager();
 
@@ -76,10 +74,10 @@ public class LifecycleUtils {
   /* public static void restartAppInto(Class Class) {
     Context ctx = AndroidUtils.getGlobalContext();
 
-    Intent intent = new Navigator(Class).b(ctx);
+    Intent intent = new Intent(this, neededActivity);
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     Intent mainIntent = Intent.makeRestartActivityTask(intent.getComponent());
-    ctx.startActivity(mainIntent);
+    ctx.startActivity(mainIntent); 
 
     Runtime.getRuntime().exit(0);
   } */

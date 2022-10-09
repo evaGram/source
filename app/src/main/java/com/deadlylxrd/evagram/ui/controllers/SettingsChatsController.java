@@ -1,11 +1,11 @@
-package com.deadlylxrd.evagram.ui;
+package com.deadlylxrd.evagram.ui.controllers;
 
 import android.content.Context;
 import android.util.SparseIntArray;
 import android.view.View;
 
 import com.deadlylxrd.evagram.EvaSettings;
-import com.deadlylxrd.evagram.ui.MsgMenuController;
+import com.deadlylxrd.evagram.ui.controllers.MsgMenuController;
 
 import org.thunderdog.challegram.R;
 import org.thunderdog.challegram.component.base.SettingView;
@@ -57,6 +57,7 @@ public class SettingsChatsController extends RecyclerViewController<Void> implem
   }
 
   @Override public void onApplySettings (int id, SparseIntArray result) {
+    // Do nothing.
   }
 
   @Override public int getId () {
@@ -87,6 +88,7 @@ public class SettingsChatsController extends RecyclerViewController<Void> implem
     ArrayList<ListItem> items = new ArrayList<>();
 
     items.add(new ListItem(ListItem.TYPE_EMPTY_OFFSET_SMALL));
+    // items.add(new ListItem(ListItem.TYPE_HEADER, 0, 0, R.string.ChatsSettingsDesc));
 
     items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
     items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_disableCameraButton, 0, R.string.DisableCameraButton));
@@ -97,6 +99,7 @@ public class SettingsChatsController extends RecyclerViewController<Void> implem
     items.add(new ListItem(ListItem.TYPE_SHADOW_BOTTOM));
 
     items.add(new ListItem(ListItem.TYPE_DESCRIPTION, 0, 0, R.string.RememberSendOptionsDesc));
+    
     items.add(new ListItem(ListItem.TYPE_SHADOW_TOP));
     items.add(new ListItem(ListItem.TYPE_RADIO_SETTING, R.id.btn_disableReactions, 0, R.string.DisableReactions));
     items.add(new ListItem(ListItem.TYPE_SEPARATOR_FULL));
